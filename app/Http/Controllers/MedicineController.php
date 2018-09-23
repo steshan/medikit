@@ -124,20 +124,6 @@ class MedicineController extends Controller
         }
     }
 
- /*   public function test()
-    {
-        $filename = 'http://tabletka.by/autocomplete.php?q=%D0%B0%D0%BD%D0%B0';
-        $page = file_get_contents($filename);
-//        echo $page;
-        echo '<br>';
-        $data = explode("\n", $page);
-        foreach ($data as $str){
-            echo  $str;
-            echo '<br>';
-        }
-        //echo count($data);
-    }*/
-
     public function nameList()
     {
         $filter = $_GET['term'];
@@ -148,15 +134,13 @@ class MedicineController extends Controller
         foreach ($data as $str) {
             $output[$str] = $str;
         }
-
         $output = json_encode($output);
-
         return $output;
     }
 
-    public function formList(){
+    public function formList()
+    {
         $filter = $_GET['term'];
-        //echo $filter;
         $filename = 'http://tabletka.by/result1.php?tlec=' . urlencode($filter);
         $page = file_get_contents($filename);
         $doc = new \DOMDocument();
@@ -166,68 +150,32 @@ class MedicineController extends Controller
         $tables = $doc->getElementById('kotel');
         $rows = $tables->getElementsByTagName('tr');
         $name = $rows[1]->getElementsByTagName('td');
-        //echo $name->item(1)->nodeValue . '<br>';
-        //echo $name->item(4)->nodeValue . '<br>';
         $result = array();
-        $result[0] =$name->item(4)->nodeValue;
-
-        $i = 0;
-        foreach ($rows as $row) {
-            if ($i <> 0) {
-                $cols = $row->getElementsByTagName('td');
-                //$i = $i + 1;
-                //echo $cols->item(2)->nodeValue . '<br>';
-                $name = $cols->item(2)->nodeValue;
-                $result[$i] = $name;
+        $subject = $rows[0]->nodeValue;
+        if (preg_match("*Макс*", $subject)) {
+            $result[0] = $name->item(4)->nodeValue;
+            $i = 0;
+            foreach ($rows as $row) {
+                if ($i <> 0) {
+                    $cols = $row->getElementsByTagName('td');
+                    $name = $cols->item(2)->nodeValue;
+                    $result[$i] = $name;
+                }
+                $i = $i + 1;
             }
-            $i = $i + 1;
+        } else {
+            $result[0] = $name->item(2)->nodeValue;
+            $i = 0;
+            foreach ($rows as $row) {
+                if ($i <> 0) {
+                    $cols = $row->getElementsByTagName('td');
+                    $name = $cols->item(1)->nodeValue;
+                    $result[$i] = $name;
+                }
+                $i = $i + 1;
+            }
         }
-        //print_r($result);
-
         $result = json_encode($result);
-
         return $result;
-    }
-
- /*   public function medicineList(){
-        //$results = array('1' => 'Москва', '2' => 'Минск', '3' => 'Брест', '4' => 'Витебск');
-        $results = array('aaaa', 'bbbb', 'cccc', 'dddd');
-        $filter = $_GET['term'];
-        $output = array();
-        //if (request()->has('term')) {
-            foreach ($results as $result){
-                if (substr_count($result, $filter) > 0)
-                    $output[$result] = $result;
-            }
-
-        //}
-        $output = json_encode($output);
-        return $output;
-    }
-
-*/
-
-    public function test2()
-    {
-        $filename = "http://tabletka.by/result1.php?tlec=%D0%BF%D0%B0%D1%80%D0%B0%D1%86%D0%B5%D1%82%D0%B0%D0%BC%D0%BE%D0%BB";
-        $page = file_get_contents($filename);
-        $doc = new \DOMDocument();
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($page);
-        $doc->preserveWhiteSpace = false;
-        $tables = $doc->getElementById('kotel');
-        $rows = $tables->getElementsByTagName('tr');
-        $name = $rows[1]->getElementsByTagName('td');
-        //echo $name->item(1)->nodeValue . '<br>';
-        echo $name->item(4)->nodeValue . '<br>';
-        $i = 0;
-        foreach ($rows as $row) {
-            if ($i <> 0) {
-                $cols = $row->getElementsByTagName('td');
-               // echo $cols->item(2)->nodeValue . '<br>';
-                echo '<br>';
-            }
-            $i = 1;
-        }
     }
 }
