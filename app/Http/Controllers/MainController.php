@@ -8,7 +8,7 @@ class MainController extends Controller
 {
 	public function __invoke()
 	{
-        $data = [];
+        $data = array();
 	    foreach (Stock::all() as $entry) {
 	        array_push($data, array(
                 'name' => $entry->medicament->name,
