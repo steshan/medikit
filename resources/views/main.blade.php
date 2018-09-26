@@ -4,17 +4,14 @@
 @section('main')
     <br>
     <br>
-
     <form action="/search">
-
-    <input name="search" id="search" type="text">
-    <input type="submit" value="Поиск">
-
+        <input name="search" id="search" type="text">
+        <input type="submit" value="Поиск">
     </form>
     <br>
     <br>
     <br>
-    <table border=" 4px black;">
+    <table>
         <tr>
             <th>Наименование</th>
             <th>Активное вещество</th>
@@ -33,4 +30,3 @@
         @endforeach
     </table>
 @endsection
-
