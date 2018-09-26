@@ -5,18 +5,22 @@ namespace App;
 
 class TabletkaByScraperProvider
 {
+    private $cache = array();
 
-    public function autocomplete($name){
+    public function autocomplete($name) {
         $filename = 'http://tabletka.by/autocomplete.php?q=' . urlencode($name);
         $page = file_get_contents($filename);
         $data = explode("\n", $page);
         return $data;
     }
 
-    public function getForm($name){
+    public function getForm($name) {
         $result = array();
         $filename = 'http://tabletka.by/result1.php?tlec=' . urlencode($name);
-        $page = file_get_contents($filename);
+        if (!array_key_exists($name, $this->cache)) {
+            $this->cache[$name] = file_get_contents($filename);
+        }
+        $page = $this->cache[$name];
         $doc = new \DOMDocument();
         libxml_use_internal_errors(true);
         $doc->loadHTML($page);
@@ -50,7 +54,10 @@ class TabletkaByScraperProvider
 
     public function getComponent($name){
         $filename = 'http://tabletka.by/result1.php?tlec=' . urlencode($name);
-        $page = file_get_contents($filename);
+        if (!array_key_exists($name, $this->cache)) {
+            $this->cache[$name] = file_get_contents($filename);
+        }
+        $page = $this->cache[$name];
         $doc = new \DOMDocument();
         libxml_use_internal_errors(true);
         $doc->loadHTML($page);
