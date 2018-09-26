@@ -28,7 +28,7 @@ class TabletkaByScraperProvider
         $tables = $doc->getElementById('kotel');
         $rows = $tables->getElementsByTagName('tr');
         $subject = $rows[0]->nodeValue;
-        if (mb_strstr($subject, "Макс")) {
+        if (preg_match("*Макс*", $subject)) {
             $i = 0;
             foreach ($rows as $row) {
                 if ($i <> 0) {
@@ -66,7 +66,7 @@ class TabletkaByScraperProvider
         $rows = $tables->getElementsByTagName('tr');
         $name = $rows[1]->getElementsByTagName('td');
         $subject = $rows[0]->nodeValue;
-        if (mb_strstr($subject, "Макc")) {
+        if (preg_match("*Макс*", $subject)) {
             $result = $name->item(4)->nodeValue;
         } else {
             $result = $name->item(2)->nodeValue;
