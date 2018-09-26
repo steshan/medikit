@@ -110,7 +110,7 @@ class MedicineController extends Controller
         if (request()->has('search')) {
             $text = $request->input('search');
             foreach (Stock::all() as $entry) {
-                if (stristr($entry->medicament->name, $text) or stristr($entry->component->name, $text)) {
+                if (mb_stristr($entry->medicament->name, $text) or mb_stristr($entry->component->name, $text)) {
                     array_push($data, array(
                         'name' => $entry->medicament->name,
                         'component' => $entry->component->name,

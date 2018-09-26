@@ -7,15 +7,10 @@ class TabletkaByScraperProvider
 {
 
     public function autocomplete($name){
-        $result = array();
         $filename = 'http://tabletka.by/autocomplete.php?q=' . urlencode($name);
         $page = file_get_contents($filename);
         $data = explode("\n", $page);
-        // TODO: why do we need to alter array after explode?
-        foreach ($data as $str) {
-            $result[$str] = $str;
-        }
-        return $result;
+        return $data;
     }
 
     public function getForm($name){
@@ -28,11 +23,8 @@ class TabletkaByScraperProvider
         $doc->preserveWhiteSpace = false;
         $tables = $doc->getElementById('kotel');
         $rows = $tables->getElementsByTagName('tr');
-        // TODO: delete unused variable
-        $name = $rows[1]->getElementsByTagName('td');
         $subject = $rows[0]->nodeValue;
-        // TODO: instead of preg_match use strstr
-        if (preg_match("*Макс*", $subject)) {
+        if (mb_strstr($subject, "Макс")) {
             $i = 0;
             foreach ($rows as $row) {
                 if ($i <> 0) {
@@ -57,7 +49,6 @@ class TabletkaByScraperProvider
     }
 
     public function getComponent($name){
-        //$result = '';
         $filename = 'http://tabletka.by/result1.php?tlec=' . urlencode($name);
         $page = file_get_contents($filename);
         $doc = new \DOMDocument();
@@ -68,7 +59,7 @@ class TabletkaByScraperProvider
         $rows = $tables->getElementsByTagName('tr');
         $name = $rows[1]->getElementsByTagName('td');
         $subject = $rows[0]->nodeValue;
-        if (preg_match("*Макс*", $subject)) {
+        if (mb_strstr($subject, "Макc")) {
             $result = $name->item(4)->nodeValue;
         } else {
             $result = $name->item(2)->nodeValue;
