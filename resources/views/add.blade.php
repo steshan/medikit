@@ -21,13 +21,12 @@
         function updateMedicineForm() {
             $("#medicine_form").html("<option>не задана</option>");
             $("#medicine_component").val('');
+            $.getJSON("/component", {term: $("#medicine_name").val()}, function (data) {
+                $("#medicine_component").val(data);
+            });
             $.getJSON("/formlist", {term: $("#medicine_name").val()}, function (data) {
                 $.each(data, function (key, val) {
-                    if (key == 0) {
-                        $("#medicine_component").val(val);
-                    } else {
                         $("#medicine_form").append("<option>" + val + "</option>");
-                    }
                 });
             });
         }

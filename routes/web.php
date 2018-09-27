@@ -20,3 +20,4 @@ Route::get('/search', 'MedicineController@searchMedicine');
 Route::get('/list', 'MedicineController@medicineList');
 Route::get('/namelist', 'MedicineController@nameList');
 Route::get('/formlist', 'MedicineController@formList');
+Route::get('/component', 'MedicineController@getComponent');

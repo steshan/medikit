@@ -136,9 +136,16 @@ class MedicineController extends Controller
        $result = array();
         if ($request->has('term')) {
             $filter = $request->input('term');
-            $result = array($this->provider->getComponent($filter));
-            $result = array_merge($result, $this->provider->getForm($filter));
+            $result = $this->provider->getForm($filter);
         }
         return json_encode($result);
+    }
+
+    public function getComponent(Request $request)
+    {
+        if ($request->has('term')) {
+            $filter = $request->input('term');
+            return json_encode($this->provider->getComponent($filter));
+        }
     }
 }
