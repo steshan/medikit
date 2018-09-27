@@ -36,7 +36,6 @@
 
 
 @section('main')
-    <h1>Добавить лекарство</h1>
     <form  action="/add" method="POST">
         {{ csrf_field() }}
         <label for="medicine_name">Наименование</label>
