@@ -33,6 +33,12 @@
     <p><a href="/expired">Просроченные лекарства</a></p>
     <p><a href="/add">Добавить лекарство</a></p>
 
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
     @section('main')
 
     @show

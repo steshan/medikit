@@ -102,6 +102,7 @@ class MedicineController extends Controller
             $stock->comment = request('medicine_comment');
         }
         $stock->save();
+        return redirect('add')->with('status', 'Medicine saved');
     }
 
     public function searchMedicine(Request $request)
