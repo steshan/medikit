@@ -57,8 +57,7 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input name';
-            exit();
+            return redirect('add')->with('status', 'Medicine name is not selected');
         }
         if (request()->has('medicine_component')) {
             $component = new Component;
@@ -73,8 +72,7 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input component';
-            exit();
+            return redirect('add')->with('status', 'Medicine component is not selected');
         }
         if (request()->has('medicine_form')) {
             $form = new Form;
@@ -89,14 +87,12 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input form';
-            exit();
+            return redirect('add')->with('status', 'Medicine form is not supplied');
         }
         if (request()->has('medicine_date')) {
             $stock->expiration_date = request('medicine_date');
         } else {
-            echo 'input date';
-            exit();
+            return redirect('add')->with('status', 'Expiration date is not supplied');
         }
         if (request()->has('medicine_comment')) {
             $stock->comment = request('medicine_comment');
