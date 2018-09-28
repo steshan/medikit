@@ -17,10 +17,7 @@ Route::get('/expired', 'MedicineController@showExpired');
 Route::get('/add', 'MedicineController@addForm');
 Route::post('/add', 'MedicineController@addMedicine');
 Route::get('/search', 'MedicineController@searchMedicine');
-Route::get('/test', 'MedicineController@test');
 Route::get('/list', 'MedicineController@medicineList');
-Route::get('/test2', 'MedicineController@test2');
 Route::get('/namelist', 'MedicineController@nameList');
 Route::get('/formlist', 'MedicineController@formList');
-
-//Route::get('/addform', function() {return view('add');});
+Route::get('/component', 'MedicineController@getComponent');

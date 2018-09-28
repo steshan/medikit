@@ -8,12 +8,20 @@ use App\Stock;
 use App\Form;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\TabletkaByScraperProvider;
 
 class MedicineController extends Controller
 {
+    private $provider;
+
+    public function __construct()
+    {
+        $this->provider = new TabletkaByScraperProvider();
+    }
+
     public function showExpired()
     {
-        $data = [];
+        $data = array();
         $today = date("Y-m-d");
         $stock = Stock::where('expiration_date', '<', $today)->get();
         foreach ($stock as $entry) {
@@ -49,8 +57,7 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input name';
-            exit();
+            return redirect('add')->with('status', 'Medicine name is not selected');
         }
         if (request()->has('medicine_component')) {
             $component = new Component;
@@ -65,8 +72,7 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input component';
-            exit();
+            return redirect('add')->with('status', 'Medicine component is not selected');
         }
         if (request()->has('medicine_form')) {
             $form = new Form;
@@ -81,101 +87,65 @@ class MedicineController extends Controller
                 }
             }
         } else {
-            echo 'input form';
-            exit();
+            return redirect('add')->with('status', 'Medicine form is not supplied');
         }
         if (request()->has('medicine_date')) {
             $stock->expiration_date = request('medicine_date');
         } else {
-            echo 'input date';
-            exit();
+            return redirect('add')->with('status', 'Expiration date is not supplied');
         }
         if (request()->has('medicine_comment')) {
             $stock->comment = request('medicine_comment');
         }
         $stock->save();
+        return redirect('')->with('status', 'Medicine saved');
     }
 
     public function searchMedicine(Request $request)
     {
-        $data = [];
-        $stock_id = [];
+        $data = array();
         if (request()->has('search')) {
             $text = $request->input('search');
-            $names = Medicament::where('name', 'like', '%' . $text . '%')->get();
-            foreach ($names as $name) {
-                array_push($stock_id, $name->stock->id);
+            foreach (Stock::all() as $entry) {
+                if (mb_stristr($entry->medicament->name, $text) or mb_stristr($entry->component->name, $text)) {
+                    array_push($data, array(
+                        'name' => $entry->medicament->name,
+                        'component' => $entry->component->name,
+                        'form' => $entry->form->name,
+                        'expiration' => $entry->expiration_date,
+                        'comment' => $entry->comment
+                    ));
+                }
             }
-            $components = Component::where('name', 'like', '%' . $text . '%')->get();
-            foreach ($components as $name) {
-                array_push($stock_id, $name->stock->id);
-            }
-            foreach ($stock_id as $name) {
-                $stock = Stock::find($name);
-                array_push($data, array(
-                    'name' => $stock->medicament->name,
-                    'component' => $stock->component->name,
-                    'form' => $stock->form->name,
-                    'expiration' => $stock->expiration_date,
-                    'comment' => $stock->comment
-                ));
-            }
-            return view('main', ['data' => $data]);
         }
+        return view('main', ['data' => $data]);
     }
 
-    public function nameList()
+    public function nameList(Request $request)
     {
-        $filter = $_GET['term'];
-        $filename = 'http://tabletka.by/autocomplete.php?q=' . urlencode($filter);
-        $page = file_get_contents($filename);
-        $data = explode("\n", $page);
-        $output = array();
-        foreach ($data as $str) {
-            $output[$str] = $str;
-        }
-        $output = json_encode($output);
-        return $output;
-    }
-
-    public function formList()
-    {
-        $filter = $_GET['term'];
-        $filename = 'http://tabletka.by/result1.php?tlec=' . urlencode($filter);
-        $page = file_get_contents($filename);
-        $doc = new \DOMDocument();
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($page);
-        $doc->preserveWhiteSpace = false;
-        $tables = $doc->getElementById('kotel');
-        $rows = $tables->getElementsByTagName('tr');
-        $name = $rows[1]->getElementsByTagName('td');
         $result = array();
-        $subject = $rows[0]->nodeValue;
-        if (preg_match("*Макс*", $subject)) {
-            $result[0] = $name->item(4)->nodeValue;
-            $i = 0;
-            foreach ($rows as $row) {
-                if ($i <> 0) {
-                    $cols = $row->getElementsByTagName('td');
-                    $name = $cols->item(2)->nodeValue;
-                    $result[$i] = $name;
-                }
-                $i = $i + 1;
-            }
-        } else {
-            $result[0] = $name->item(2)->nodeValue;
-            $i = 0;
-            foreach ($rows as $row) {
-                if ($i <> 0) {
-                    $cols = $row->getElementsByTagName('td');
-                    $name = $cols->item(1)->nodeValue;
-                    $result[$i] = $name;
-                }
-                $i = $i + 1;
-            }
+        if ($request->has('term')) {
+            $filter = $request->input('term');
+            $result = $this->provider->autocomplete($filter);
         }
-        $result = json_encode($result);
-        return $result;
+        return json_encode($result);
+    }
+
+    public function formList(Request $request)
+    {
+       $result = array();
+        if ($request->has('term')) {
+            $filter = $request->input('term');
+            $result = $this->provider->getForm($filter);
+        }
+        return json_encode($result);
+    }
+
+    public function getComponent(Request $request)
+    {
+        if ($request->has('term')) {
+            $filter = $request->input('term');
+            return json_encode($this->provider->getComponent($filter));
+        }
     }
 }
