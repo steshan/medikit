@@ -8,7 +8,7 @@
     <script>
         $(function () {
             $("#medicine_name").autocomplete({
-                source: '/namelist',
+                source: '{{ url('/namelist') }}',
                 change: function (event, ui) {
                     updateMedicineForm();
                 },
@@ -21,10 +21,10 @@
         function updateMedicineForm() {
             $("#medicine_form").html("<option>не задана</option>");
             $("#medicine_component").val('');
-            $.getJSON("/component", {term: $("#medicine_name").val()}, function (data) {
+            $.getJSON("{{ url('/component') }}", {term: $("#medicine_name").val()}, function (data) {
                 $("#medicine_component").val(data);
             });
-            $.getJSON("/formlist", {term: $("#medicine_name").val()}, function (data) {
+            $.getJSON("{{ url('/formlist') }}", {term: $("#medicine_name").val()}, function (data) {
                 $.each(data, function (key, val) {
                         $("#medicine_form").append("<option>" + val + "</option>");
                 });
@@ -35,7 +35,7 @@
 
 
 @section('main')
-    <form  action="/add" method="POST">
+    <form  action="{{ url('/add') }}" method="POST">
         {{ csrf_field() }}
         <label for="medicine_name">Наименование</label>
         <input name="medicine_name" id="medicine_name" type="text">

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use \App\Stock;
+use App\Stock;
 
 class MainController extends Controller
 {
 	public function __invoke()
 	{
-        $data = array();
+	    $data = array();
 	    foreach (Stock::all() as $entry) {
 	        array_push($data, array(
+	            'id' => $entry->id,
                 'name' => $entry->medicament->name,
                 'component' => $entry->component->name,
                 'form' => $entry->form->name,

@@ -26,6 +26,7 @@ class MedicineController extends Controller
         $stock = Stock::where('expiration_date', '<', $today)->get();
         foreach ($stock as $entry) {
             array_push($data, array(
+                'id' => $entry->id,
                 'name' => $entry->medicament->name,
                 'component' => $entry->component->name,
                 'form' => $entry->form->name,
@@ -109,6 +110,7 @@ class MedicineController extends Controller
             foreach (Stock::all() as $entry) {
                 if (mb_stristr($entry->medicament->name, $text) or mb_stristr($entry->component->name, $text)) {
                     array_push($data, array(
+                        'id' => $entry->id,
                         'name' => $entry->medicament->name,
                         'component' => $entry->component->name,
                         'form' => $entry->form->name,
@@ -147,5 +149,37 @@ class MedicineController extends Controller
             $filter = $request->input('term');
             return json_encode($this->provider->getComponent($filter));
         }
+    }
+
+    public function delete($id)
+    {
+        Stock::where('id', $id)->delete();
+        return redirect('')->with('status', 'Deleted');
+    }
+
+    public function updateForm($id)
+    {
+        $data = Stock::where('id', $id)->first();
+        $result = array(
+	            'id' => $data->id,
+                'name' => $data->medicament->name,
+                'component' => $data->component->name,
+                'form' => $data->form->name,
+                'expiration' => $data->expiration_date,
+                'comment' => $data->comment
+            );
+        return view('update', ['data' => $result]);
+    }
+
+    public function updateMedicine(Request $request, $id)
+    {
+        $stock = Stock::find($id);
+        if ($request->has('comment')) {
+            $stock->comment = $request->input('comment');
+        } else {
+            $stock->comment = '';
+        }
+        $stock->save();
+        return redirect('')->with('status', 'Saved');
     }
 }
