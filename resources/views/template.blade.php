@@ -29,9 +29,9 @@
 
 </head>
 <body>
-    <p><a href="/">На главную</a></p>
-    <p><a href="/expired">Просроченные лекарства</a></p>
-    <p><a href="/add">Добавить лекарство</a></p>
+    <p><a href="{{ url('/') }}">На главную</a></p>
+    <p><a href="{{ url('/expired') }}">Просроченные лекарства</a></p>
+    <p><a href="{{ url('/add') }}">Добавить лекарство</a></p>
 
     @if (session('status'))
         <div class="alert alert-success">
