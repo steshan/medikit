@@ -168,7 +168,7 @@ class MedicineController extends Controller
                 'expiration' => $data->expiration_date,
                 'comment' => $data->comment
             );
-        return view('edit', ['data' => $result]);
+        return view('update', ['data' => $result]);
     }
 
     public function updateMedicine(Request $request, $id)
