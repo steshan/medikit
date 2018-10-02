@@ -22,5 +22,5 @@ Route::get('/namelist', 'MedicineController@nameList');
 Route::get('/formlist', 'MedicineController@formList');
 Route::get('/component', 'MedicineController@getComponent');
 Route::get('/delete/{id}', 'MedicineController@delete');
-Route::get('/update/{id}', 'MedicineController@updateForm');
+Route::get('/update', 'MedicineController@updateForm');
 Route::post('/update/{id}', 'MedicineController@updateMedicine');

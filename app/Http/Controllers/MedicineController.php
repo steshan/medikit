@@ -157,9 +157,11 @@ class MedicineController extends Controller
         return redirect('')->with('status', 'Deleted');
     }
 
-    public function updateForm($id)
+    public function updateForm(Request $request)
     {
-        $data = Stock::where('id', $id)->first();
+        if ($request->has('modify')) {
+        $data = Stock::where('id', $request->input('modify'))->first();
+        }
         $result = array(
 	            'id' => $data->id,
                 'name' => $data->medicament->name,
@@ -171,9 +173,11 @@ class MedicineController extends Controller
         return view('update', ['data' => $result]);
     }
 
-    public function updateMedicine(Request $request, $id)
+    public function updateMedicine(Request $request)
     {
-        $stock = Stock::find($id);
+        if ($request->has('modify')) {
+        $stock = Stock::find($request->input('modify'));
+        }
         if ($request->has('comment')) {
             $stock->comment = $request->input('comment');
         } else {
