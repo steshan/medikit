@@ -13,14 +13,12 @@
 
 
 Route::get('/', 'MainController');
-Route::get('/expired', 'MedicineController@showExpired');
-Route::get('/add', 'MedicineController@addForm');
-Route::post('/add', 'MedicineController@addMedicine');
-Route::get('/search', 'MedicineController@searchMedicine');
-Route::get('/list', 'MedicineController@medicineList');
-Route::get('/namelist', 'MedicineController@nameList');
-Route::get('/formlist', 'MedicineController@formList');
-Route::get('/component', 'MedicineController@getComponent');
-Route::get('/delete/{id}', 'MedicineController@delete');
-Route::get('/update', 'MedicineController@updateForm');
-Route::post('/update/{id}', 'MedicineController@updateMedicine');
+Route::get('/add', 'MainController@addForm');
+Route::post('/add', 'MainController@addMedicine');
+Route::get('/update', 'MainController@updateForm');
+Route::patch('/update', 'MainController@updateMedicine');
+Route::delete('/update', 'MainController@delete');
+
+Route::get('/namelist', 'MainController@nameList');
+Route::get('/formlist', 'MainController@formList');
+Route::get('/component', 'MainController@getComponent');
