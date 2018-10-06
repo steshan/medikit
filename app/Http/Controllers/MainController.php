@@ -20,7 +20,7 @@ class MainController extends Controller
         $filter = \DataFilter::source(new Medicine());
         $filter->add('name','Название лекарства', 'text');
         $filter->submit('поиск');
-        //$filter->reset('на главную');
+        $filter->reset('очистить');
         $filter->build();
 
         $grid = \DataGrid::source($filter);
@@ -31,6 +31,12 @@ class MainController extends Controller
         $grid->add('component', 'Действующее вещество');
         $grid->edit('/update/', 'Edit','modify|delete');
         $grid->link('/add', "Добавить лекарство", "TR");
+
+        $grid->row(function ($row) {
+            if (strtotime($row->cell('expiration_date')->value) < time()) {
+                $row->style("background-color:#f2dede");
+            }
+        });
 
         $grid->paginate(10);
 
@@ -67,7 +73,7 @@ class MainController extends Controller
         return redirect('')->with('status', 'Medicine saved');
     }
 
-public function addForm()
+    public function addForm()
     {
         $edit = \DataEdit::source(new Medicine());
         $edit->add('name', 'Название', 'autocomplete')->remote(null, 'names', "/namelist")->onchange('updateMedicineForm()');
@@ -78,9 +84,11 @@ public function addForm()
         $edit->link('', "На главную", "TR");
         return $edit->view('edit', compact('edit'));
     }
+
     public function updateForm()
     {
         $edit = \DataEdit::source(new Medicine());
+        $edit->back('update', '/');
         $edit->add('name', 'Название', 'text')->mode('readonly');
         $edit->add('form', 'Форма выпуска', 'text')->mode('readonly');
         $edit->add('component', 'Действующее вещество', 'text')->mode('readonly');
