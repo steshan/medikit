@@ -8,40 +8,40 @@ use Illuminate\Http\Request;
 
 class MedicineController extends Controller
 {
-    public function addMedicine()
+    public function createMedicine()
     {
         $stock = new Medicine();
         if (request()->has('auto_name')) {
             $stock->name = request('auto_name');
         } else {
-            return redirect('add')->with('status', 'Medicine name is not selected');
+            return redirect('/medicine/create')->with('status', 'Medicine name is not selected');
         }
         if (request()->has('component')) {
             $stock->component = request('component');
         } else {
-            return redirect('add')->with('status', 'Medicine component is not selected');
+            return redirect('/medicine/create')->with('status', 'Medicine component is not selected');
         }
         if (request()->has('form')) {
             $stock->form = request('form');
         } else {
-            return redirect('add')->with('status', 'Medicine form is not supplied');
+            return redirect('/medicine/create')->with('status', 'Medicine form is not supplied');
         }
         if (request()->has('expiration_date')) {
             $stock->expiration_date = request('expiration_date');
         } else {
-            return redirect('add')->with('status', 'Expiration date is not supplied');
+            return redirect('/medicine/create')->with('status', 'Expiration date is not supplied');
         }
         if (request()->has('comment')) {
             $stock->comment = request('comment');
         }
         $stock->save();
-        return redirect('')->with('status', 'Medicine saved');
+        return redirect('/')->with('status', 'Medicine saved');
     }
 
-    public function addForm()
+    public function createMedicineView()
     {
         $edit = \DataEdit::source(new Medicine());
-        $edit->add('name', 'Название', 'autocomplete')->remote(null, 'names', "/namelist")->onchange('updateMedicineForm()');
+        $edit->add('name', 'Название', 'autocomplete')->remote(null, 'names', "/data/names")->onchange('updateMedicineForm()');
         $edit->add('form', 'Форма выпуска', 'select')->options(array('не задана'));
         $edit->add('component', 'Действующее вещество', 'text');
         $edit->add('expiration_date', 'Срок годности', 'date')->format('Y-m-d', 'ru');
@@ -50,7 +50,7 @@ class MedicineController extends Controller
         return $edit->view('edit', compact('edit'));
     }
 
-    public function updateForm()
+    public function updateMedicineView()
     {
         $edit = \DataEdit::source(new Medicine());
         $edit->back('update|do_delete', '/');
@@ -62,11 +62,11 @@ class MedicineController extends Controller
         return $edit->view('edit', compact('edit'));
     }
 
-    public function delete()
+    public function deleteMedicine()
     {
         if (request()->has('do_delete')) {
             Medicine::where('id', request('do_delete'))->delete();
-            return redirect('')->with('status', 'Deleted');
+            return redirect('/')->with('status', 'Deleted');
         }
     }
 
@@ -81,6 +81,6 @@ class MedicineController extends Controller
             $stock->comment = '';
         }
         $stock->save();
-        return redirect('')->with('status', 'Saved');
+        return redirect('/')->with('status', 'Saved');
     }
 }

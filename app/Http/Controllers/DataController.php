@@ -14,7 +14,7 @@ class DataController extends Controller
         $this->provider = new TabletkaByScraperProvider();
     }
 
-    public function nameList(Request $request)
+    public function getNames(Request $request)
     {
         $result = array();
         if ($request->has('q')) {
@@ -26,7 +26,7 @@ class DataController extends Controller
         return json_encode($result);
     }
 
-    public function formList(Request $request)
+    public function getForms(Request $request)
     {
         $result = array();
         if ($request->has('q')) {

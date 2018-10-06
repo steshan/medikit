@@ -21,8 +21,8 @@ class MainController extends Controller
         $grid->add('comment', 'Комментарий');
         $grid->add('form', 'Форма выпуска');
         $grid->add('component', 'Действующее вещество');
-        $grid->edit('/update/', 'Edit','modify|delete');
-        $grid->link('/add', "Добавить лекарство", "TR");
+        $grid->edit('/medicine', 'Edit','modify|delete');
+        $grid->link('/medicine/create', "Добавить лекарство", "TR");
 
         $grid->row(function ($row) {
             if (strtotime($row->cell('expiration_date')->value) < time()) {
