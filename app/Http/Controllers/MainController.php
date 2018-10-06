@@ -81,14 +81,14 @@ class MainController extends Controller
         $edit->add('component', 'Действующее вещество', 'text');
         $edit->add('expiration_date', 'Срок годности', 'date')->format('Y-m-d', 'ru');
         $edit->add('comment', 'Комментарий', 'textarea');
-        $edit->link('', "На главную", "TR");
+        $edit->link('/', "На главную", "TR");
         return $edit->view('edit', compact('edit'));
     }
 
     public function updateForm()
     {
         $edit = \DataEdit::source(new Medicine());
-        $edit->back('update', '/');
+        $edit->back('update|do_delete', '/');
         $edit->add('name', 'Название', 'text')->mode('readonly');
         $edit->add('form', 'Форма выпуска', 'text')->mode('readonly');
         $edit->add('component', 'Действующее вещество', 'text')->mode('readonly');
