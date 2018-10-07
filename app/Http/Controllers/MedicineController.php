@@ -42,7 +42,7 @@ class MedicineController extends Controller
     {
         $edit = \DataEdit::source(new Medicine());
         // TODO: Why do we need to set options?
-        $edit->add('name', 'Название', 'autocomplete')->options(array('a'=>'b'))->remote('', 'names', "/data/names")->limit(15)->onchange('updateMedicineForm()');
+        $edit->add('name', 'Название', 'autocomplete')->options(array(''))->remote('', 'names', "/data/names")->limit(15)->onchange('updateMedicineForm()');
         $edit->add('form', 'Форма выпуска', 'select')->options(array('не задана'));
         $edit->add('component', 'Действующее вещество', 'text');
         $edit->add('expiration_date', 'Срок годности', 'date')->format('Y-m-d', 'ru');
