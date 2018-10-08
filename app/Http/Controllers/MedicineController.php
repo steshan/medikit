@@ -31,7 +31,7 @@ class MedicineController extends Controller
         } else {
             return redirect('/medicine/create')->with('status', 'Expiration date is not supplied');
         }
-        if (request()->has('comment')) {
+        if (request()->filled('comment')) {
             $stock->comment = request('comment');
         }
         $stock->save();
@@ -41,7 +41,8 @@ class MedicineController extends Controller
     public function createMedicineView()
     {
         $edit = \DataEdit::source(new Medicine());
-        $edit->add('name', 'Название', 'autocomplete')->remote(null, 'names', "/data/names")->onchange('updateMedicineForm()');
+        // TODO: Why do we need to set options?
+        $edit->add('name', 'Название', 'autocomplete')->options(array(''))->remote('', 'names', "/data/names")->limit(15)->onchange('updateMedicineForm()');
         $edit->add('form', 'Форма выпуска', 'select')->options(array('не задана'));
         $edit->add('component', 'Действующее вещество', 'text');
         $edit->add('expiration_date', 'Срок годности', 'date')->format('Y-m-d', 'ru');
