@@ -20,14 +20,13 @@ class MainController extends Controller
         $grid->add('expiration_date|strtotime|date[Y-m-d]', 'Срок годности', true);
         $grid->add('comment', 'Комментарий');
         $grid->add('form', 'Форма');
-        //$grid->add('component', 'Действующее вещество');
         $grid->edit('/medicine', 'Edit','show|modify|delete');
         $grid->link('/medicine/create', "Добавить лекарство", "TR");
 
         $grid->row(function ($row) {
             if (strtotime($row->cell('expiration_date')->value) < time()) {
                 $row->style("background-color:#f2dede");
-            } elseif (strtotime($row->cell('expiration_date')->value) < time() + (30 * 24 * 60 * 60)) {
+            } elseif (strtotime($row->cell('expiration_date')->value) < strtotime('+1 month')) {
                 $row->style("background-color:#efed7d");
             }
         });

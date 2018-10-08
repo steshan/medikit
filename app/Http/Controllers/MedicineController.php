@@ -73,10 +73,10 @@ class MedicineController extends Controller
 
     public function updateMedicine(Request $request)
     {
-        if ($request->has('update')) {
+        if ($request->filled('update')) {
             $stock = Medicine::find($request->input('update'));
         }
-        if ($request->has('comment')) {
+        if ($request->filled('comment')) {
             $stock->comment = $request->input('comment');
         } else {
             $stock->comment = '';
