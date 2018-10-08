@@ -16,12 +16,12 @@ class MainController extends Controller
         $filter->build();
 
         $grid = \DataGrid::source($filter);
-        $grid->add('name', 'Название лекарства', true);
+        $grid->add('name', 'Наименование', true);
         $grid->add('expiration_date|strtotime|date[Y-m-d]', 'Срок годности', true);
         $grid->add('comment', 'Комментарий');
-        $grid->add('form', 'Форма выпуска');
-        $grid->add('component', 'Действующее вещество');
-        $grid->edit('/medicine', 'Edit','modify|delete');
+        $grid->add('form', 'Форма');
+        //$grid->add('component', 'Действующее вещество');
+        $grid->edit('/medicine', 'Edit','show|modify|delete');
         $grid->link('/medicine/create', "Добавить лекарство", "TR");
 
         $grid->row(function ($row) {
