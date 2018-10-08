@@ -11,22 +11,22 @@ class MedicineController extends Controller
     public function createMedicine()
     {
         $stock = new Medicine();
-        if (request()->has('auto_name')) {
+        if (request()->filled('auto_name')) {
             $stock->name = request('auto_name');
         } else {
             return redirect('/medicine/create')->with('status', 'Medicine name is not selected');
         }
-        if (request()->has('component')) {
+        if (request()->filled('component')) {
             $stock->component = request('component');
         } else {
             return redirect('/medicine/create')->with('status', 'Medicine component is not selected');
         }
-        if (request()->has('form')) {
+        if (request()->filled('form')) {
             $stock->form = request('form');
         } else {
             return redirect('/medicine/create')->with('status', 'Medicine form is not supplied');
         }
-        if (request()->has('expiration_date')) {
+        if (request()->filled('expiration_date')) {
             $stock->expiration_date = request('expiration_date');
         } else {
             return redirect('/medicine/create')->with('status', 'Expiration date is not supplied');
@@ -73,10 +73,10 @@ class MedicineController extends Controller
 
     public function updateMedicine(Request $request)
     {
-        if ($request->has('update')) {
+        if ($request->filled('update')) {
             $stock = Medicine::find($request->input('update'));
         }
-        if ($request->has('comment')) {
+        if ($request->filled('comment')) {
             $stock->comment = $request->input('comment');
         } else {
             $stock->comment = '';
