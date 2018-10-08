@@ -27,6 +27,8 @@ class MainController extends Controller
         $grid->row(function ($row) {
             if (strtotime($row->cell('expiration_date')->value) < time()) {
                 $row->style("background-color:#f2dede");
+            } elseif (strtotime($row->cell('expiration_date')->value) < time() + (30 * 24 * 60 * 60)) {
+                $row->style("background-color:#efed7d");
             }
         });
 
