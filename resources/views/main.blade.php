@@ -1,23 +1,26 @@
-@extends('rapyd::demo.master')
-
-@section('title','Аптечка')
+@extends('layouts.app')
 
 @section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Аптечка</div>
 
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+
+                            {!! $filter !!}
+
+                            {!! $grid !!}
+
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
-
-
-    <h1>Аптечка</h1>
-    <p>
-
-        {!! $filter !!}
-
-        {!! $grid !!}
-
-
-    </p>
-@stop
+    </div>
+@endsection

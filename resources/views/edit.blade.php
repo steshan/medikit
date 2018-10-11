@@ -1,14 +1,6 @@
-@extends('rapyd::demo.master')
-
-@section('title','Аптечка')
+@extends('layouts.app')
 
 @section('content')
-    @if (session('status'))
-        <div class="alert alert-danger">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <script>
         function updateMedicineForm() {
             $("#form").html("<option>не задана</option>");
@@ -24,10 +16,24 @@
         }
     </script>
 
-    <h1>Аптечка</h1>
-    <p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Аптечка</div>
 
-        {!! $edit !!}
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
 
-    </p>
-@stop
+                        {!! $edit !!}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
