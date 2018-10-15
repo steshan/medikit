@@ -7,6 +7,11 @@ use App\Medicine;
 
 class MainController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function __invoke()
     {
         $filter = \DataFilter::source(new Medicine());
