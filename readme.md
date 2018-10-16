@@ -13,6 +13,7 @@ Software for managing medicine stock at home.
    - PDO PHP Extension
    - Tokenizer PHP Extension
    - XML PHP Extension
+   - LDAP PHP Extension
  - MySQL
  
 
