@@ -30,7 +30,7 @@ composer install
 
 Create empty database with `utf8mb4` charset and `utf8mb4_unicode_ci` collation
 ```
-CREATE DATABASE `medikit` DEFAULT CHARSET utf8mb4 COLLATION utf8mb4_unicode_ci;
+CREATE DATABASE `medikit` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Create database user with limited privileges
@@ -39,4 +39,4 @@ CREATE USER `medikit`@`%` IDENTIFIED BY 'medikitpassword`;
 GRANT SELECT,INSERT,UPDATE,DELETE on `medikit`.* to `medikit`@`%`; 
 ```
 
-Edit `.env` file to setup correct database credentials and run `php artisan migrate` to create tables.
+Copy or rename `.env.example` file to `.env`. Edit `.env` to setup correct database credentials and run `php artisan migrate` to create tables.
