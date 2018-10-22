@@ -32,6 +32,7 @@ class DataController extends Controller
         if ($request->has('q')) {
             $result = $this->provider->getForm($request->input('q'));
         }
+        $result = array_unique($result);
         return json_encode($result);
     }
 
