@@ -36,8 +36,8 @@ CREATE DATABASE `medikit` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 Create database user with limited privileges
 ```
-CREATE USER `medikit`@`%` IDENTIFIED BY 'medikitpassword`;
-GRANT SELECT,INSERT,UPDATE,DELETE on `medikit`.* to `medikit`@`%`; 
+CREATE USER `medikit`@`%` IDENTIFIED BY 'medikitpassword';
+GRANT ALL PRIVILEGES on `medikit`.* to `medikit`@`%`; 
 ```
 
 Copy or rename `.env.example` file to `.env`. Edit `.env` to setup correct database credentials and run `php artisan migrate` to create tables.
